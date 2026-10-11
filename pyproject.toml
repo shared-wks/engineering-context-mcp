@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "engineering-context-mcp"
+version = "0.1.0"
+description = "A portfolio project for learning and building MCP integrations"
+readme = "README.md"
+requires-python = ">=3.12"
+license = "MIT"
+authors = [
+    { name = "Othmane Fathallah" }
+]
+dependencies = [
+    "mcp>=1.28,<2"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8,<10",
+    "ruff>=0.9,<1"
+]
+
+[project.scripts]
+engineering-context-server = "engineering_context_mcp.server:main"
+engineering-context-client = "engineering_context_mcp.client:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
