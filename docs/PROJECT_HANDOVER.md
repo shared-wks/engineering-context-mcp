@@ -1,54 +1,71 @@
 # Engineering Context MCP — Project Handover & Continuity Guide
 
-> **Snapshot:** 11 October 2026, updated after creation of the GitLab group `shared-wks`.  
-> **Project status:** v0.1.0 MCP foundation is published on GitHub with passing CI; a **public GitLab group now exists**, but its `engineering-context-mcp` project, second Git remote, and CI/CD pipeline are **not created/verified**. Docker and PostgreSQL are planned.  
-> **Purpose of this document:** Preserve the project's decisions, implementation, setup history, verified results, open questions, and next steps so another developer or AI assistant can resume work accurately.  
-> **Repository location:** Intended path `docs/PROJECT_HANDOVER.md`; the latest Git commit containing this file has **not been verified**. Update and commit the Markdown copy explicitly.
+> **Snapshot:** 11 October 2026, updated after **successful dual-platform publication and GitLab CI**.  
+> **Project status:** v0.1.0 foundation published under `shared-wks` on **GitHub and GitLab**. The two `main` refs and annotated `v0.1.0` tags have been verified identical via local `git ls-remote`. GitLab CI has a successful `quality` and `tests` pipeline. **Docker/PostgreSQL and Jira/Confluence integrations remain planned**, not implemented.  
+> **Purpose:** Keep all setup history, architectural choices, verified work, environment setup, current limitations, and upcoming actions available to future developers and AI sessions.  
+> **File location:** `docs/PROJECT_HANDOVER.md`. A previous version is present in the public repositories; **this updated version must be copied into the local checkout and pushed to both**.
 
 ## 1. Read this first: current state
 
 **Project:** Engineering Context MCP  
-**Python distribution / repository:** `engineering-context-mcp`  
+**Distribution / repository:** `engineering-context-mcp`  
 **Python import package:** `engineering_context_mcp`  
 **GitHub organization:** [Shared Workspace (`shared-wks`)](https://github.com/shared-wks)  
-**Public GitHub repository:** https://github.com/shared-wks/engineering-context-mcp  
-**Public GitLab group:** https://gitlab.com/shared-wks (created; **project not yet created**)  
-**Local workspace on the original Mac:** `~/myprojects/poc/engineering-context-mcp`  
-**Primary branch:** `main`  
-**First release tag:** `v0.1.0`  
+**GitHub repo (Public):** https://github.com/shared-wks/engineering-context-mcp  
+**GitLab group:** [Shared Workspace (`shared-wks`)](https://gitlab.com/shared-wks), Public, group ID `144466068`  
+**GitLab repo (Public):** https://gitlab.com/shared-wks/engineering-context-mcp, project ID `87479265`  
+**Local workspace on original personal Mac:** `~/myprojects/poc/engineering-context-mcp`  
+**Default branch:** `main`  
+**Release tag:** annotated `v0.1.0`  
 **License:** MIT
+
+### Verified Git reference integrity (11 Oct 2026)
+
+The user ran `git rev-parse main` and `git ls-remote` against **both** remotes. All three branch IDs were identical:
+
+```text
+main (local, origin and gitlab)
+73db8f944f029fd77db556cf7eab906bb21bb2c9
+
+annotated tag ref v0.1.0 (origin and gitlab)
+39b080abcaff1e98c128e223fd97f989e99da427
+```
+
+The GitLab API independently confirmed `main` at `73db8f9...`, `v0.1.0` **tag object** at `39b080a...`, and the tag's **target commit** at `424044936356ff111488a3a5fb4892ea148978a7`. The tag intentionally references the initial release, not today's later `main` tip.
 
 ### Verified as completed
 
-- [x] Created a standalone Python project with a `src/` package layout.
-- [x] Used Python **`venv` + `pip`**, explicitly **not `uv`**.
-- [x] Built a functioning MCP server and a separate Python MCP client using **stdio**.
-- [x] Exposed **4 tools, 2 resources and 1 prompt**.
-- [x] Implemented **8 unit tests** and **6 subprocess/protocol integration tests**.
-- [x] All **14 tests passed** locally; Ruff linting and formatting checks passed; `pip check` passed.
-- [x] Generated `requirements/dev-py314.txt` using `pip-tools` for a Python 3.14 development dependency resolution.
-- [x] Initialized local Git (`main`), created a first commit, and published the code to a **public GitHub repository**.
-- [x] Published **one version tag** (`v0.1.0` in the project's release process).
-- [x] Updated the README roadmap to Docker/PostgreSQL rather than SQLite and pushed the documentation commit.
-- [x] Added six GitHub topics: `python`, `mcp`, `model-context-protocol`, `mcp-server`, `ai-engineering`, `integration-testing`.
-- [x] Observed **two successful GitHub Actions workflow runs** in the latest screenshots (initial commit and README update).
-- [x] Created the `shared-wks` organization, configured its display name as **Shared Workspace**, and enforced secure two-factor authentication for members.
-- [x] Set up SSH key authentication from the personal Mac to the GitHub user account; `ssh -T git@github.com` succeeded.
-- [x] Created the **public GitLab group** `shared-wks` with display name **Shared Workspace**; verified both from the GitLab page and through the connected GitLab API. Group contains no projects at the time of this snapshot.
+- [x] Created a standalone Python project with a `src/` package layout, managed using **`venv` + `pip`** (not `uv`).
+- [x] Implemented a functional MCP stdio server/client: **4 tools, 2 resources, 1 prompt**.
+- [x] Implemented **8 unit tests** and **6 real protocol/subprocess integration tests** (14 passing in local validation).
+- [x] Validated `pip check`, Ruff lint/format, and Python dependency installation locally.
+- [x] Added `requirements/dev-py314.txt` with `pip-tools` / `--strip-extras` constraints.
+- [x] Created public GitHub `shared-wks/engineering-context-mcp`, set up working SSH and published `main` and annotated `v0.1.0`.
+- [x] Observed two initial green GitHub Actions `Python CI` runs; README Docker/PostgreSQL roadmap and six GitHub topics published.
+- [x] Created and configured public-facing GitHub organization **Shared Workspace**, with secure organization-wide 2FA; personal GitHub 2FA/passkey configured.
+- [x] Created **Public GitLab group** `shared-wks` / **Shared Workspace**.
+- [x] Created **Public GitLab project** `shared-wks/engineering-context-mcp` as an empty repository (no remote README/initial commit).
+- [x] Generated a separate Mac GitLab ED25519 SSH key, registered its public half, and successfully authenticated with `ssh -T git@gitlab.com`.
+- [x] Added GitLab SSH remote `gitlab` without disturbing GitHub `origin` (which remains `main`'s upstream).
+- [x] Pushed existing `main` and `v0.1.0` to GitLab, and verified **matching full branch/tag SHAs on GitHub and GitLab**.
+- [x] Published root **`requirements.txt`** and **`requirements-dev.txt`**, with thin editable-install references to `pyproject.toml`.
+- [x] Published expanded README with clone/venv/install/run/pytest/Ruff instructions and explicit in-memory limits.
+- [x] Published **`.gitlab-ci.yml`** with independent `quality` and `tests` jobs.
+- [x] **GitLab pipeline 2935094589 succeeded** on commit `73db8f9...`, with both jobs reported successful by live GitLab lookup.
+- [x] Published the **previous** `docs/PROJECT_HANDOVER.md` on GitLab's `main` (also covered by the matching GitHub branch tip); this current updated copy still needs a documentation commit.
 
-### Not completed — do not claim these are implemented
+### Still pending / not yet implemented
 
-- [ ] GitLab **project** `shared-wks/engineering-context-mcp`, GitLab SSH key/remote, GitLab CI/CD, and publication of matching `main` and `v0.1.0` refs. (**Public GitLab group is complete**.)
-- [ ] Dockerfile, Docker Compose services, PostgreSQL, SQLAlchemy, Alembic migrations.
-- [ ] Database persistence (the current task store is **in memory** and resets on server restart).
-- [ ] Networked/remote MCP transport (current implementation uses **stdio**, not deployed Streamable HTTP).
-- [ ] Jira Cloud and Confluence Cloud integration. **No Atlassian credentials or API calls** are required by v0.1.0.
-- [ ] Production authentication/authorization, service observability, vulnerability scanning and deployment.
-- [ ] GitHub branch protection/rulesets, a formal GitHub Release page, and additional production-oriented repository polish (not confirmed).
-- [ ] Portable root-level `requirements.txt` and `requirements-dev.txt`, a user/developer Quick Start in README, and GitHub CI installation via `requirements-dev.txt` were **proposed** in the next GitLab-preparation discussion; their presence and publication have **not been verified**.
-- [ ] Committing this current handover as `docs/PROJECT_HANDOVER.md` has **not been verified**, even though a downloadable copy was prepared earlier.
+- [ ] Apply **this newly updated handover** to local `docs/PROJECT_HANDOVER.md`, commit and push to both remotes.
+- [ ] Verify a **fresh clean clone/install/client smoke test on the second desktop** (portable instructions are published, but actual second-machine validation is not established).
+- [ ] Confirm the **latest GitHub Actions workflow** status after the recent portable-setup/CI commits; the earlier two green runs are confirmed, but the latest run is not independently checked here.
+- [ ] Align GitHub Actions installation with `requirements-dev.txt` if desired; live published `.github/workflows/ci.yml` still installs `-e ".[dev]"` and tests Python 3.12/3.13.
+- [ ] Dockerfile, Docker Compose services, PostgreSQL, SQLAlchemy, Alembic migrations, and persistent task storage.
+- [ ] Streamable HTTP/networked MCP service, Jira and Confluence adapters, production auth/security and observability.
+- [ ] GitHub protected branch/rulesets, a formal GitHub Release, extra security scans, and production hardening (not confirmed).
+- [ ] Confirm account recovery codes are stored securely and replaced if they were ever exposed.
 
-**Critical distinction:** This is currently a credible, tested **MCP foundation** and a scaffold for an engineering-context platform; it is **not yet** a production-ready Jira/Confluence context service.
+**Critical distinction:** GitLab dual publication and CI **are completed**, but the running app is still an **in-memory, local stdio MCP demonstration**. It is not yet a production-ready Jira/Confluence integration.
 
 ## 2. Why the project exists and what it will become
 
@@ -73,7 +90,8 @@ Target users include developers, QA engineers and engineering teams. The portfol
 | `pip-tools` + Python 3.14 constraints file | **Implemented**; Linux/cross-version reproducibility needs further CI hardening. |
 | GitHub public organization + GitHub Actions | **Implemented**. |
 | GitLab public group | **Implemented and verified:** `shared-wks`, display name Shared Workspace, visibility public. |
-| GitLab repository, SSH, CI | **Not yet created/verified.** The group currently has no projects. |
+| Portable requirements and onboarding README | **Published** on both remotes (confirmed by GitLab tree and file content). Second-desktop fresh install remains untested. |
+| GitLab repository, SSH, CI | **Implemented and verified.** Public project, working SSH key and second remote, matching `main`/tag, passing `quality`/`tests` pipeline. |
 | Docker + Compose + PostgreSQL | **Chosen for v0.2**, not implemented. SQLite is **not** in the revised plan. |
 | SQLAlchemy + Alembic | Planned persistence/migrations for v0.2. |
 | Streamable HTTP | Planned for v0.3; retain stdio for debugging/tests. |
@@ -97,9 +115,14 @@ Target users include developers, QA engineers and engineering teams. The portfol
 13. **GitHub SSH:** Generated a dedicated ED25519 key pair and configured SSH to select it for `github.com`; registered the public key on the GitHub account. Verified `ssh -T git@github.com` printed successful authentication.
 14. **GitHub repository:** Created `shared-wks/engineering-context-mcp` as **Public** and initially empty. Local `git init -b main` followed by staging, content checks, a first commit/tag, and push via SSH.
 15. **GitHub CI and profile polish:** The initial commit and subsequent README roadmap update both appeared as **successful `Python CI` runs** in screenshots. Added six topical tags to the repository's About section.
-16. **GitLab group created (11 Oct 2026):** Created `https://gitlab.com/shared-wks` with display name **Shared Workspace** and Public visibility. The screenshot shows **Create project**, no entries under Subgroups and projects, and the group URL; a live GitLab lookup confirmed `full_path=shared-wks`, `visibility=public`, and an empty project list. Lookup for `shared-wks/engineering-context-mcp` returned not found.
-17. **Portable local/desktop setup requested:** User requested a root-level `requirements.txt` and README instructions so another machine or other developers can clone, install, run and test the app. Instructions and proposed files `requirements.txt`, `requirements-dev.txt`, and `.gitlab-ci.yml` were provided in chat, but **there is no evidence yet they have been created, tested or pushed**.
-18. **Next work:** Create the matching **public GitLab project** under the existing group, finish portable installation/readme changes and GitLab CI, configure GitLab SSH/remote and push matching history. Then implement Docker/PostgreSQL-based v0.2.
+16. **GitLab group created (11 Oct 2026):** Created Public `shared-wks` / Shared Workspace group (ID `144466068`).
+17. **GitLab public project created:** Created blank Public repository `shared-wks/engineering-context-mcp` (ID `87479265`), without initializing a README or divergent commit.
+18. **Portable onboarding files now published:** The latest synchronized `main` includes `requirements.txt` (`-e .`), `requirements-dev.txt` (`-e .[dev]`), a significantly expanded README (including fresh clone/venv/install/client/test instructions), and `.gitlab-ci.yml`.
+19. **GitLab SSH and remotes:** On the original Mac, created `~/.ssh/id_ed25519_gitlab_personal` (+ `.pub`) and added `Host gitlab.com` in SSH config, preserving `Host github.com`. `ssh -T git@gitlab.com` returned a successful GitLab welcome message. GitLab key was configured without an expiration date; if the device is lost or compromised, revoke it from GitLab. Added `gitlab` remote; existing `origin` continues to point to GitHub.
+20. **First GitLab push and synchronization (11 Oct 2026):** `git push gitlab main` and `git push gitlab v0.1.0` succeeded. Full `main` branch ID `73db8f944f029fd77db556cf7eab906bb21bb2c9` and annotated tag ref `39b080abcaff1e98c128e223fd97f989e99da427` were identical on both hosts. This is verified both by terminal logs and live GitLab branch/tag lookup.
+21. **GitLab CI passing:** GitLab pipeline `2935094589` succeeded on `main` at `73db8f9...` with distinct `quality` and `tests` jobs both successful. The user still needs to test a clean clone on the desktop, and future CI changes should be verified on both hosts.
+22. **Handover continuity:** An earlier `docs/PROJECT_HANDOVER.md` is already published on synchronized `main`; **this new status update** is a replacement that must be committed and pushed to GitHub and GitLab.
+23. **Next engineering milestone:** Validate desktop onboarding; prepare Docker/Compose/PostgreSQL persistence using SQLAlchemy/Alembic. Jira/Confluence and HTTP transport remain later releases.
 
 ### Git history seen during setup
 
@@ -121,7 +144,7 @@ engineering-context-mcp/
 │       └── ci.yml                  # GitHub Actions workflow
 ├── docs/
 │   ├── architecture.md            # v0.1 architecture (existing)
-│   └── PROJECT_HANDOVER.md        # THIS proposed handover (add to local repo)
+│   └── PROJECT_HANDOVER.md        # old version already published; replace with this update
 ├── examples/
 │   └── inspector.md               # MCP Inspector instructions
 ├── requirements/
@@ -138,13 +161,16 @@ engineering-context-mcp/
 │   └── test_mcp_integration.py     # 6 real stdio protocol tests
 ├── .env.example                   # future config placeholders, no real credentials
 ├── .gitignore                     # ignores virtual environment/secrets/caches
+├── .gitlab-ci.yml                 # GitLab quality + test pipeline (published)
+├── requirements.txt               # -e . (published)
+├── requirements-dev.txt           # -e .[dev] (published)
 ├── LICENSE                        # MIT
 ├── README.md
 ├── pyproject.toml                 # setuptools, dependencies, scripts, tool config
 └── venv/                          # local ONLY; ignored by Git
 ```
 
-**Do not assume these files exist yet:** `.gitlab-ci.yml`, root-level `requirements.txt` and `requirements-dev.txt`, `Dockerfile`, `compose.yaml`, database migration directories, Jira/Confluence integrations, `.env`, or `docs/PROJECT_HANDOVER.md` in the public repo until explicitly verified with `git ls-files` / the hosted repository. The root requirements and GitLab CI files have been **designed in chat, not confirmed as committed**.
+**Verified present on GitLab `main` at `73db8f9...` (and therefore on identical GitHub `main`):** `.gitlab-ci.yml`, `requirements.txt`, `requirements-dev.txt`, `docs/PROJECT_HANDOVER.md`. **Not implemented:** `Dockerfile`, `compose.yaml`, database migrations, Jira/Confluence integrations, and real `.env` files. The old handover in Git must be replaced by this newer document.
 
 ### `pyproject.toml` snapshot
 
@@ -240,40 +266,45 @@ python -m pip install -e '.[dev]' -c requirements/dev-py314.txt
 
 The constraints file was generated on macOS. Its compatibility with other OSes/architectures and Python versions must be proven by CI; it is not a universal cross-platform lock. A clean install into a fresh environment is more meaningful than checking an already-populated venv.
 
-### Portable installation requested for a second desktop and other users (pending implementation)
+### Portable installation and second-desktop onboarding (published; remote test pending)
 
-The next repository improvement is to add two **thin pip entry-point files** at the repository root, *without duplicating or independently pinning all dependencies*:
+The root requirements files are **present in GitLab `main`**, and the user's local Git history matches both remotes:
 
 `requirements.txt`:
 
 ```text
-# Runtime dependencies come from pyproject.toml
+# Install the application using dependencies from pyproject.toml
 -e .
 ```
 
 `requirements-dev.txt`:
 
 ```text
-# Runtime and optional dev dependencies from pyproject.toml
+# Install application and development dependencies
 -e .[dev]
 ```
 
-Then make the README explain (a) HTTPS/SSH cloning, (b) `python3 -m venv venv` and activation on macOS/Linux, (c) Windows activation separately, (d) `python -m pip install -r requirements-dev.txt`, (e) `python -m engineering_context_mcp.client` and/or `engineering-context-client`, (f) why a directly launched stdio server waits for an MCP client, (g) pytest/Ruff commands, and (h) all **current** limitations (in-memory state, no Jira/Confluence, no HTTP endpoint). The full proposed README content was supplied in the conversation but **is not independently verified as applied**.
+The expanded `README.md` on GitLab `main` documents HTTPS/SSH cloning, `venv` creation and activation for macOS/Linux/Windows, pip installation, `python -m engineering_context_mcp.client`, direct MCP server launch, MCP Inspector, pytest, Ruff and the in-memory limitation. It describes v0.2 Docker/PostgreSQL as planned, not done. **Actual fresh-clone installation on the second desktop is still pending.**
 
-For a new desktop *before* those files are published, the existing and verified editable installation remains:
+**Recommended first-time desktop test (Ubuntu/Linux):**
 
 ```bash
+mkdir -p ~/myprojects/poc
+cd ~/myprojects/poc
 git clone https://github.com/shared-wks/engineering-context-mcp.git
 cd engineering-context-mcp
 python3 -m venv venv
 source venv/bin/activate
 python -m pip install --upgrade pip
-python -m pip install -e '.[dev]'
+python -m pip install -r requirements-dev.txt
+python -m pip check
 python -m pytest -v
+python -m ruff check .
+python -m ruff format --check .
 python -m engineering_context_mcp.client
 ```
 
-Use `python -m pip install -r requirements-dev.txt` **only after** that file has been added and pushed. A private SSH key for the original Mac should **never** be copied to the desktop; use HTTPS to clone public code, then configure a new per-machine SSH key if push access is needed.
+This uses HTTPS only for public cloning. If changes will be pushed from the second desktop, configure that machine's **own** SSH key(s) and verified Git author identity—do not transfer a private key from the Mac or copy its `venv/` directory. Root requirements files delegate dependency metadata to `pyproject.toml`; they are **not universal immutable locks**. Python 3.14 local constraints remain separate under `requirements/`.
 
 ### Regenerate the Python 3.14 constraints file
 
@@ -334,50 +365,87 @@ origin  git@github.com:shared-wks/engineering-context-mcp.git (push)
 
 - Workflow file: `.github/workflows/ci.yml`.
 - Workflow name: **Python CI**.
-- Existing initial matrix targeted **Python 3.12 and Python 3.13** on Linux, ran installation, Ruff linting and pytest. Do not assume Python 3.14 or formatting checks run in CI unless the workflow is updated and verified.
-- Latest supplied screenshots show **Python CI #1 and #2 both successful** (green checks), corresponding to the initial release push and the README roadmap update.
+- The **published** workflow (verified from GitLab mirror) targets **Python 3.12 and Python 3.13** on Linux, uses `python -m pip install -e ".[dev]"`, runs Ruff lint and pytest. It **has not yet been changed** to use `requirements-dev.txt`, or add a Python 3.14 job, `ruff format --check` or `pip check`.
+- Earlier screenshots showed **Python CI #1 and #2 both successful** (green checks). The latest workflow result after subsequent portable-install/CI commits is **not independently checked** in this handover; verify it before claiming full dual-CI completion.
 - Links: [repository Actions](https://github.com/shared-wks/engineering-context-mcp/actions), [public repository](https://github.com/shared-wks/engineering-context-mcp).
 - Future improvements: current supported action versions, Python 3.14 job, formatting check, `pip check`, dependency caching, minimum permissions, PR validation, and eventually database/container integration tests.
 
 ### Account recovery follow-up
 
-Verify that GitHub account recovery codes have been refreshed as appropriate, and are securely backed up. That final verification has **not been independently confirmed**. Never copy recovery codes, private keys, passwords, tokens, or `.env` contents into this document, GitHub, GitLab, AI prompts, issues or screenshots.
+Verify account recovery codes are securely stored, and replace any that have been exposed. Never copy recovery codes, private keys, passwords, tokens, or `.env` contents into this document, GitHub, GitLab, AI prompts, issues or screenshots.
 
 ## 8. Publishing workflow and dual-remote strategy
 
-### Current status
+### Current result — both repositories published and synchronized
 
-- **GitHub:** organization/repository created, public, pushed, tag present, initial two CI runs succeeded.
-- **GitLab group:** **created and confirmed public**: [Shared Workspace `shared-wks`](https://gitlab.com/shared-wks). GitLab group ID observed: `144466068`.
-- **GitLab project:** **not created**. Live lookup of `shared-wks/engineering-context-mcp` returned `404 Project Not Found`; group project list was empty.
-- **GitLab SSH remote and CI:** **not yet configured/verified**.
-- **Local:** keep one working checkout only; **do not** create a separate codebase for GitLab.
+| Property | GitHub (`origin`) | GitLab (`gitlab`) |
+|---|---|---|
+| Public repository | https://github.com/shared-wks/engineering-context-mcp | https://gitlab.com/shared-wks/engineering-context-mcp |
+| Group / organization | `shared-wks` | `shared-wks` |
+| SSH URL | `git@github.com:shared-wks/engineering-context-mcp.git` | `git@gitlab.com:shared-wks/engineering-context-mcp.git` |
+| `main` commit | `73db8f944f029fd77db556cf7eab906bb21bb2c9` | **Same SHA** |
+| Annotated `v0.1.0` ref | `39b080abcaff1e98c128e223fd97f989e99da427` | **Same SHA** |
+| CI | Two earlier successful GitHub runs seen | Pipeline **2935094589 successful** (`quality`, `tests`) |
 
-### GitLab publication steps (group done; repository pending)
+**GitLab facts verified live:** project ID `87479265`; public visibility; default branch `main`; non-empty repository. GitLab's `main` branch SHA is `73db8f9...`; annotated `v0.1.0` tag object SHA `39b080a...`, pointing to initial commit `424044936356ff111488a3a5fb4892ea148978a7`. Pipeline [2935094589](https://gitlab.com/shared-wks/engineering-context-mcp/-/pipelines/2935094589) has status **success**, triggered by push to `main`, with jobs `quality` and `tests` both **success**.
 
-1. **DONE:** Created a **public** GitLab group named **Shared Workspace**, URL path `shared-wks` (`https://gitlab.com/shared-wks`). Do not attempt to re-create it.
-2. **NEXT:** Click **Create project** from the existing group page, choose **Create blank project**, set name/slug to `engineering-context-mcp`, namespace `shared-wks`, visibility **Public**, and **do not initialize with a README**. Avoid an initial remote commit that would diverge from GitHub.
-3. Add root `requirements.txt` and `requirements-dev.txt` and complete the README for second-machine onboarding (see section 6); validate clean installation, Ruff and the 14 tests. These changes are proposed, not yet verified.
-4. Add `.gitlab-ci.yml` **at repository root**, using a suitable Python Linux image and jobs for dependency validation, Ruff and pytest. Update GitHub CI only after reviewing the existing workflow. Commit and push changes to GitHub `main` first; verify GitHub Actions again.
-5. Create a **separate** GitLab ED25519 SSH key on the Mac, register only its `.pub` half in GitLab, and add a distinct `Host gitlab.com` entry to `~/.ssh/config` without overwriting GitHub settings. Test `ssh -T git@gitlab.com` and verify host fingerprints when prompted.
-6. Add a second remote named `gitlab`, and push the **same existing Git history** (not an import-created independent history) to GitLab.
-7. Push release tags explicitly (at least `v0.1.0`) and verify histories, file contents, and the real GitLab pipeline. GitLab runner availability may require setup/checks.
-8. Keep GitHub as the primary remote `origin`, GitLab as `gitlab`; no automatic bidirectional synchronization until explicitly chosen.
+### SSH setup on the original Mac
 
-After the blank GitLab project and SSH authentication are confirmed:
+GitHub key (already working):
 
-```bash
-# Use the verified public group path, shared-wks.
-git remote add gitlab git@gitlab.com:shared-wks/engineering-context-mcp.git
-git push gitlab main
-git push gitlab v0.1.0
-
-# Normal future publishing:
-git push origin main
-git push gitlab main
+```text
+~/.ssh/id_ed25519_github_personal      # PRIVATE, never share
+~/.ssh/id_ed25519_github_personal.pub  # public registration key
 ```
 
-**Never force-push** simply to make the two hosts match; reconcile differences intentionally.
+GitLab key (already working):
+
+```text
+~/.ssh/id_ed25519_gitlab_personal      # PRIVATE, never share
+~/.ssh/id_ed25519_gitlab_personal.pub  # public registration key
+```
+
+`~/.ssh/config` has distinct `Host github.com` and `Host gitlab.com` entries, each selecting its own key. The GitLab key was added to the GitLab account and `ssh -T git@gitlab.com` confirmed successful authentication. The SSH key was added without an expiration date as requested. Verify the private key has a passphrase, appropriate filesystem permissions and a secure backup policy. Revoke it from GitLab if the Mac is lost or compromised.
+
+**Account note:** The successful local SSH push establishes which GitLab account has access to this project. When using any additional GitLab integration or connector, verify its authenticated account and project permissions separately.
+
+### Publishing commands for future development
+
+```bash
+cd ~/myprojects/poc/engineering-context-mcp
+git status
+git remote -v
+# After local tests and a new commit:
+git push origin main
+git push gitlab main
+# Publish new version tags explicitly when a release is ready:
+# git push origin vX.Y.Z
+# git push gitlab vX.Y.Z
+```
+
+`origin` is the default upstream for local `main`. The `gitlab` remote is for deliberate mirrored pushes. **No automatic synchronization or forced rewrites.** Always verify full SHA parity after significant pushes:
+
+```bash
+git rev-parse main
+git ls-remote origin refs/heads/main
+git ls-remote gitlab refs/heads/main
+
+git ls-remote --tags origin 'refs/tags/v0.1.0'
+git ls-remote --tags gitlab 'refs/tags/v0.1.0'
+```
+
+Do not re-create/move `v0.1.0`. It labels the initial historical release. Later docs, requirements and CI commits stay on `main` until a future release tag is intentionally created.
+
+### GitLab CI file and observed results
+
+The published root `.gitlab-ci.yml` uses `python:3.13-slim`, pip installs `requirements-dev.txt`, and runs these separate jobs:
+
+- `quality`: `pip check`, `ruff check .`, `ruff format --check .`.
+- `tests`: `pytest -v`.
+
+Live GitLab status: **pipeline 2935094589 SUCCESS**, both jobs SUCCESS, on `main` SHA `73db8f9...`. Check the job logs for detailed test counts whenever needed; job success alone does not specify an exact number of collected tests.
+
+Next improvement is ensuring both providers run the same test/check set, updating GitHub Actions deliberately and re-validating hosted CI. The portable README has already been published; the clean desktop installation remains to be tested.
 
 ## 9. Planned application architecture: v0.2 and beyond
 
@@ -449,56 +517,57 @@ Build these **incrementally** while keeping v0.1 tests valid. At v0.2, retain st
 
 ## 11. Exact recommended next actions
 
-### First: preserve this handover in GitHub
+### First: commit **this updated** handover to both repositories
 
-Copy this Markdown file into the local repository as `docs/PROJECT_HANDOVER.md`, then:
+The earlier `docs/PROJECT_HANDOVER.md` already exists on published `main`, but it still reports GitLab as pending. Download this replacement into the original local checkout:
 
 ```bash
 cd ~/myprojects/poc/engineering-context-mcp
+# If saved into ~/Downloads, for example:
+cp ~/Downloads/PROJECT_HANDOVER.md docs/PROJECT_HANDOVER.md
 git status
+git diff -- docs/PROJECT_HANDOVER.md
+# Check for accidental secrets, credentials or sensitive local data.
 git add docs/PROJECT_HANDOVER.md
 git diff --cached --check
-git diff --cached --stat
-git commit -m "docs: add project handover and continuity guide"
+git commit -m "docs: record successful dual-platform publication and GitLab CI"
 git push origin main
+git push gitlab main
 ```
 
-Optionally add this line under README's Documentation section and commit it with the handover:
+Verify the two new `main` refs again after the push. This is a **new docs commit on `main`**, not a modification to `v0.1.0`.
 
-```markdown
-See [Project Handover](docs/PROJECT_HANDOVER.md) for setup history, verified milestones and the next development steps.
-```
+### Then: validate onboarding and CI
 
-This handover describes current status **as of 11 October 2026**, not a continuously synchronized inventory. Update the snapshot/date and checkboxes after future milestones.
+- [x] Public GitHub organization/repository and first release tag.
+- [x] Public GitLab group and project.
+- [x] GitLab SSH key and working SSH authentication.
+- [x] Two Git remotes with synchronized `main` and `v0.1.0` SHAs (at snapshot).
+- [x] Root `requirements.txt`, `requirements-dev.txt`, and developer-friendly README published.
+- [x] `.gitlab-ci.yml` published and GitLab pipeline **2935094589** successful (`quality`, `tests`).
+- [x] Earlier GitHub `Python CI` runs #1 and #2 successful.
+- [ ] Push this latest handover update to **both** platforms; re-check SHA parity.
+- [ ] Check GitHub Actions **most recent** workflow status and inspect failures or warnings if any.
+- [ ] Fresh clone and run on second desktop (Python 3.12+; Linux/macOS/Windows instructions as appropriate), including 14 automated tests and an MCP client smoke test.
+- [ ] Consider aligning GitHub CI with `requirements-dev.txt`, `ruff format --check`, `pip check` and an additional Python 3.14 job; only mark complete after CI success.
+- [ ] Review GitHub membership permissions, secure recovery-code storage, repository protection/rulesets and security scanning.
+- [ ] Optionally create a formal GitHub Release for `v0.1.0`, and add a GitLab pipeline status badge to README.
 
-### Then: finish the dual public publishing setup
+### Then: begin v0.2 engineering work (not started)
 
-- [x] **GitLab public group** created: `https://gitlab.com/shared-wks`, display name Shared Workspace.
-- [ ] **GitLab blank public project** `shared-wks/engineering-context-mcp` — next browser action: **Create project** within the group.
-- [ ] Add root `requirements.txt` and `requirements-dev.txt`; update README with working setup instructions for a second desktop and third-party developers; confirm with a clean `venv` test.
-- [ ] Create `.gitlab-ci.yml` at repository root and review GitHub CI installation consistency; commit to `main` and push to GitHub.
-- [ ] Configure/verify a separate GitLab SSH key and local `gitlab` remote (do not disturb working `origin`).
-- [ ] Push `main` and the existing `v0.1.0` tag to GitLab and verify matching commit IDs with GitHub.
-- [ ] Confirm the GitLab pipeline and subsequent GitHub Actions jobs actually pass.
-- [ ] Review GitHub organization member privileges, recovery-code rotation, and branch protection if not yet independently confirmed.
-- [ ] Optional polish: published release notes, README badges, minimal workflow permissions, CI dependency upgrades.
-
-### Then: begin v0.2 technical design and implementation
-
-- [ ] Write `docs/adr/` architecture decisions for persistence, transport and migrations.
-- [ ] Choose supported PostgreSQL major version and pin container images intentionally.
-- [ ] Introduce application configuration (`pydantic-settings` or similar), avoiding real `.env` commits.
-- [ ] Implement Dockerfile, `.dockerignore`, `compose.yaml`, and PostgreSQL health checks.
-- [ ] Add SQLAlchemy persistence abstraction and Alembic migration(s).
-- [ ] Preserve current MCP contracts; refactor domain/service/persistence layers incrementally.
-- [ ] Write PostgreSQL integration tests and add them to CI, then demonstrate restart persistence.
-- [ ] Update architecture docs and README with exact reproducible commands and CI status.
+- [ ] Write `docs/adr/` architecture decision records for persistence, SQLAlchemy/repositories and migrations.
+- [ ] Choose and pin PostgreSQL/container image versions, design `compose.yaml` and persistent volumes.
+- [ ] Add Dockerfile, `.dockerignore`, app config and Compose health checks.
+- [ ] Implement SQLAlchemy and Alembic migrations with repository/service layers.
+- [ ] Keep MCP tool contracts and the current 14 tests valid; add PostgreSQL integration and restart-persistence tests.
+- [ ] Extend both CI pipelines to exercise the backend containers; confirm clean fresh-install and development workflows.
+- [ ] Update README/architecture/handover as each deliverable is completed.
 
 ## 12. Safe restart instructions for any new chat / AI coding assistant
 
-Copy the following prompt into a future conversation, and attach this file (plus current `README.md`, `pyproject.toml` and any recently changed files if code changes are requested):
+Copy this prompt into a future conversation and attach this updated `docs/PROJECT_HANDOVER.md` plus any files being actively edited:
 
-> Continue development of **Engineering Context MCP**. Read the attached `docs/PROJECT_HANDOVER.md` first. The project uses standard Python `venv` and `pip`, not `uv`. It is a public portfolio project under GitHub `shared-wks/engineering-context-mcp`. v0.1.0 implements an in-memory FastMCP server and Python stdio client, with 8 unit tests and 6 protocol integration tests (14 passing), Ruff, a Python 3.14 constraints file, and working GitHub CI. The public GitLab group `shared-wks` now exists; **creating the blank GitLab project** is the next step. Root `requirements.txt` / `requirements-dev.txt`, fuller onboarding README, `.gitlab-ci.yml`, GitLab SSH/push/CI and the v0.2 Docker/Compose/PostgreSQL/SQLAlchemy/Alembic backend remain unverified/planned. **Do not assume planned features exist.** Respect the business goal of connecting engineering context from Jira/Confluence, avoid SQLite, preserve tests, and provide exact project paths and copyable files. Ask for the latest `git status`, `git log`, and relevant files when facts may have changed. Keep credentials out of chat and the repository.
+> Continue **Engineering Context MCP**. Read `docs/PROJECT_HANDOVER.md` first; it is the project continuity source. Use standard Python `venv` and `pip`, not `uv`. The public **GitHub and GitLab** repositories both use namespace `shared-wks/engineering-context-mcp`; local Git remotes are `origin` (GitHub upstream) and `gitlab` (GitLab), with one checkout. At the last verified snapshot, both `main` refs were `73db8f944f029fd77db556cf7eab906bb21bb2c9` and annotated `v0.1.0` tag objects were `39b080abcaff1e98c128e223fd97f989e99da427`. Root `requirements.txt`/`requirements-dev.txt`, expanded README and `.gitlab-ci.yml` are published. GitLab pipeline 2935094589 succeeded with `quality` and `tests` jobs; earlier GitHub Python CI runs were green. The functional app remains a **local in-memory FastMCP stdio server/client** with 4 tools, 2 resources, 1 prompt, 8 unit tests and 6 integration tests. **Do not claim PostgreSQL, Docker deployment, Streamable HTTP, Jira or Confluence are implemented.** The next steps are to commit any newer handover, confirm latest GitHub Actions, test fresh desktop installation, then design v0.2 with Docker/Compose/PostgreSQL/SQLAlchemy/Alembic rather than SQLite. Preserve history and the `v0.1.0` tag; verify `git status`, latest commits and CI before changes. Never share private SSH keys, `.env` values or recovery codes.
 
 ### Recommended fresh-session verification commands
 
@@ -519,8 +588,12 @@ python -m pytest -v
 
 | Date | Event | Evidence / validation |
 |---|---|---|
-| 2026-10-11 (earlier) | First handover written after GitHub `main` push, `v0.1.0`, and two successful GitHub CI runs | User screenshots and local command outputs in original setup conversation. |
-| 2026-10-11 (current update) | **Public GitLab group created**: Shared Workspace / `shared-wks` | Group page screenshot and connected GitLab `get_group` lookup (`public`; empty projects), plus project lookup 404. |
-| 2026-10-11 (current update) | Portable installation / README / GitLab CI requested and drafted | Draft instructions exist in chat; **no proof yet that files have been committed**. |
+| 2026-10-11 (early) | First public GitHub release and two initial successful GitHub CI runs | Terminal commands and screenshots |
+| 2026-10-11 (mid) | Public GitLab group `shared-wks` created | GitLab UI and live group lookup; ID `144466068` |
+| 2026-10-11 (later) | Public GitLab project created, separate SSH registered, `gitlab` remote added | GitLab project lookup and user's terminal SSH/remote output |
+| 2026-10-11 (later) | First GitLab `main` and `v0.1.0` pushes succeeded | User's `git push` output; full branch SHA and annotated tag object SHA matched GitHub |
+| 2026-10-11 (verified live) | README, portable requirement files, old handover and `.gitlab-ci.yml` present | GitLab repository tree and file reads at `73db8f9...` |
+| 2026-10-11 (verified live) | **GitLab CI pipeline 2935094589 succeeded**; `quality` and `tests` jobs both successful | Live GitLab pipeline and jobs lookup on `main` SHA `73db8f9...` |
+| 2026-10-11 (this document) | Continuity handover updated to show dual-publication milestone | This replacement Markdown/Word copy; Git commits to publish this update still pending |
 
 **Rule for future documentation:** mark items **verified**, **reported by user**, or **planned/unverified**. Never silently convert plans into accomplishments. Update this handover whenever a release or infrastructure milestone is completed.
