@@ -1,0 +1,2 @@
+# Install the application using dependencies from pyproject.toml
+-e .

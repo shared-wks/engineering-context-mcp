@@ -1,0 +1,2 @@
+# Install application and development dependencies
+-e .[dev]
