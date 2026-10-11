@@ -100,13 +100,14 @@ See `examples/inspector.md` for interactive testing.
 
 ## Roadmap
 
-| Version | Scope |
-|---------|-------|
-| 0.1 | Local MCP server and client |
-| 0.2 | Protocol tests and SQLite |
-| 0.3 | Jira integration |
-| 0.4 | Confluence integration |
-| 1.0 | Portfolio release |
+| Version | Milestone | Scope |
+|---------|-----------|-------|
+| v0.1.0 | MCP Foundation | Python MCP server/client, tools, resources, prompts, automated tests |
+| v0.2.0 | Containerized Backend | Docker, Docker Compose, PostgreSQL, SQLAlchemy, Alembic |
+| v0.3.0 | Networked MCP Service | Streamable HTTP, configuration, health checks, logging |
+| v0.4.0 | Atlassian Integrations | Jira Cloud and Confluence Cloud API integrations |
+| v0.5.0 | Engineering Workflows | Cross-platform context retrieval and workflow automation |
+| v1.0.0 | Production-Ready Release | Security hardening, observability, CI/CD, documentation |
 
 ## Security
 
